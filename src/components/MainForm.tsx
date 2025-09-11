@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { CalculadoraLetras, type DadosProfessor, type ResultadoCalculo } from '../utils/calculadoraLetras';
+import ResultadoCalculoComponent from './ResultadoCalculo';
 import './MainForm.css';
 
 interface FormData {
@@ -36,6 +38,9 @@ const MainForm: React.FC = () => {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
+  const [resultado, setResultado] = useState<ResultadoCalculo | null>(null);
+  const [proximaProgressao, setProximaProgressao] = useState<{ ano: number; letra: string; meses: number } | null>(null);
+  const [mostrarResultado, setMostrarResultado] = useState(false);
 
   // Função para formatar o WhatsApp
   const formatWhatsapp = (value: string): string => {
@@ -124,9 +129,25 @@ const MainForm: React.FC = () => {
     e.preventDefault();
     
     if (validateForm()) {
+      // Preparar dados para o cálculo
+      const dadosProfessor: DadosProfessor = {
+        anoIngresso: formData.anoIngresso,
+        letraAtual: formData.letraAtual
+      };
+
+      // Calcular letra devida
+      const resultadoCalculo = CalculadoraLetras.calcularLetraDevida(dadosProfessor);
+      
+      // Calcular próxima progressão
+      const proximaProgressaoData = CalculadoraLetras.calcularProximaProgressao(dadosProfessor);
+
+      // Atualizar estados
+      setResultado(resultadoCalculo);
+      setProximaProgressao(proximaProgressaoData);
+      setMostrarResultado(true);
+
       console.log('Dados do formulário:', formData);
-      // Aqui você pode processar os dados do formulário
-      alert('Formulário enviado com sucesso!');
+      console.log('Resultado do cálculo:', resultadoCalculo);
     }
   };
 
@@ -267,6 +288,14 @@ const MainForm: React.FC = () => {
           </button>
         </div>
       </form>
+
+      {/* Resultado do Cálculo */}
+      {mostrarResultado && (
+        <ResultadoCalculoComponent 
+          resultado={resultado} 
+          proximaProgressao={proximaProgressao} 
+        />
+      )}
     </div>
   );
 };
