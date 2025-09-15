@@ -14,7 +14,7 @@
 /* Ajustes para desktop */
 @media (min-width: 769px) {
   .resultado-container {
-    max-width: 850px;
+    max-width: 800px;
     padding: 40px;
   }
 }
@@ -100,6 +100,7 @@
   gap: 0;
   width: 100%;
   max-width: 500px;
+  box-sizing: border-box;
 }
 
 .cards-container .arrow-overlay {
@@ -197,6 +198,99 @@
   .cards-container .arrow-overlay {
     font-size: 38px;
   }
+
+/* Estilos para os cards do ADTS - Nova implementação */
+.adts-comparacao {
+  border-radius: 20px;
+  padding: 20px 15px;
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.adts-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding: 25px 15px;
+  border-radius: 16px;
+  flex: 1;
+  max-width: 180px;
+  min-width: 140px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  /* background: linear-gradient(135deg, #6c757d 0%, #495057 100%); */
+  color: white;
+}
+
+.adts-card.adts-atual.adts-correto {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.adts-card.adts-atual.adts-incorreto {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+}
+
+.adts-card.adts-calculado {
+  background: linear-gradient(135deg, #17a2b8 0%, #00ddff 100%);
+}
+
+.adts-card:hover {
+  transform: translateY(-2px);
+}
+
+.adts-header {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  text-align: center;
+  white-space: nowrap;
+  color: white;
+}
+
+.adts-valor {
+  font-size: 32px;
+  font-weight: 900;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+/* Responsividade para ADTS em dispositivos móveis */
+@media (max-width: 768px) {
+  .adts-comparacao {
+    padding: 15px 10px;
+    margin: 15px 0;
+  }
+  
+  .adts-card {
+    max-width: 140px;
+    min-width: 120px;
+    padding: 20px 10px;
+  }
+  
+  .adts-valor {
+    font-size: 28px;
+    width: 70px;
+    height: 70px;
+  }
+  
+  .adts-header {
+    font-size: 11px;
+  }
+}
   
   .letra-card {
     padding: 20px 10px;
@@ -547,6 +641,19 @@
   line-height: 1.4;
 }
 
+.observacao-prescricao p strong {
+  color: white !important;
+}
+
+/* Força todos os elementos da seção retroativo a serem brancos */
+.retroativo-section,
+.retroativo-section *,
+.retroativo-section p,
+.retroativo-section strong,
+.retroativo-section span {
+  color: white !important;
+}
+
 /* Responsividade para retroativo */
 @media (max-width: 768px) {
   .valor-principal {
@@ -557,5 +664,90 @@
   
   .valor-destaque {
     font-size: 20px;
+  }
+}
+
+/* Estilos para ADTS */
+.adts-correto {
+  color: #28a745 !important;
+  font-weight: 600;
+}
+
+.adts-incorreto {
+  color: #dc3545 !important;
+  font-weight: 600;
+}
+
+/* Forçar cores brancas nos cards de ADTS */
+.adts-card .adts-header,
+.adts-card .adts-valor,
+.adts-atual .adts-header,
+.adts-atual .adts-valor,
+.adts-calculado .adts-header,
+.adts-calculado .adts-valor {
+  color: white !important;
+  -webkit-text-fill-color: white !important;
+}
+
+.adts-card,
+.adts-atual,
+.adts-calculado {
+  color: white !important;
+}
+
+/* Responsividade para cards de ADTS - igual aos cards de letras */
+@media (max-width: 768px) {
+  .adts-comparacao {
+    padding: 15px 10px !important;
+    margin: 15px 0 !important;
+  }
+  
+  .adts-comparacao .cards-container {
+    gap: 0 !important;
+    max-width: 400px !important;
+  }
+  
+  .adts-comparacao .arrow-overlay {
+    font-size: 38px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .adts-comparacao {
+    padding: 10px 5px !important;
+    margin: 10px 0 !important;
+  }
+  
+  .adts-comparacao .cards-container {
+    gap: 0 !important;
+    max-width: 320px !important;
+  }
+  
+  .adts-comparacao .arrow-overlay {
+    font-size: 32px !important;
+  }
+  
+  .adts-card,
+  .adts-atual,
+  .adts-calculado {
+    padding: 15px 8px !important;
+    min-width: 100px !important;
+    max-width: 130px !important;
+    gap: 10px !important;
+  }
+  
+  .adts-card .adts-header,
+  .adts-atual .adts-header,
+  .adts-calculado .adts-header {
+    font-size: 10px !important;
+    letter-spacing: 0.4px !important;
+  }
+  
+  .adts-card .adts-valor,
+  .adts-atual .adts-valor,
+  .adts-calculado .adts-valor {
+    font-size: 24px !important;
+    width: 55px !important;
+    height: 55px !important;
   }
 }

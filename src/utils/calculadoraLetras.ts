@@ -3,6 +3,7 @@ export interface DadosProfessor {
   anoIngresso: number;
   letraAtual: string;
   nivel: number; // 1=I, 2=II, 3=III, 4=IV, 5=V, 6=VI
+  adtsAtual: number; // Percentual de ADTS que o professor recebe atualmente (0-35%)
 }
 
 export interface ResultadoCalculo {
@@ -14,6 +15,10 @@ export interface ResultadoCalculo {
   progressaoDecreto: boolean;
   progressaoLCE405: boolean;
   progressaoLCE503: boolean;
+  adtsPercentual: number;
+  adtsQuinquenios: number;
+  adtsAtual: number;
+  adtsCorreto: boolean;
   detalhes: string[];
   situacao: 'em_estagio' | 'pode_progredir' | 'atualizado';
   retroativo?: {
@@ -97,6 +102,13 @@ function calcularVencimentosAno(anoDestino: number): number[][] {
   return vencimentos;
 }
 
+// Função para calcular o percentual de ADTS baseado nos anos de serviço
+function calcularPercentualADTS(anosServico: number): number {
+  // ADTS: 5% a cada 5 anos de serviço
+  const quinquenios = Math.floor(anosServico / 5);
+  return quinquenios * 5; // 5% por quinquênio
+}
+
 // Cache para vencimentos calculados
 const CACHE_VENCIMENTOS: { [ano: number]: number[][] } = {
   2020: VENCIMENTOS_2020,
@@ -130,6 +142,18 @@ export class CalculadoraLetras {
     detalhes.push(`Ingresso no serviço público: ${dadosProfessor.anoIngresso}`);
     detalhes.push(`Anos de serviço: ${anosServico} anos`);
     
+    // Calcular ADTS
+    const percentualADTS = calcularPercentualADTS(anosServico);
+    const quinquenios = Math.floor(anosServico / 5);
+    detalhes.push(`ADTS (Adicional por Tempo de Serviço): ${quinquenios} quinquênio(s) = ${percentualADTS}%`);
+    
+    // Verificar se o ADTS atual está correto
+    if (dadosProfessor.adtsAtual === percentualADTS) {
+      detalhes.push(`✅ ADTS atual (${dadosProfessor.adtsAtual}%) está correto`);
+    } else {
+      detalhes.push(`⚠️ ADTS atual (${dadosProfessor.adtsAtual}%) está INCORRETO - deveria ser ${percentualADTS}%`);
+    }
+    
     // Verificar se ainda está em estágio probatório
     if (anosServico < ANOS_ESTAGIO_PROBATORIO) {
       const anosRestantes = ANOS_ESTAGIO_PROBATORIO - anosServico;
@@ -144,6 +168,10 @@ export class CalculadoraLetras {
         progressaoDecreto: false,
         progressaoLCE405: false,
         progressaoLCE503: false,
+        adtsPercentual: calcularPercentualADTS(anosServico),
+        adtsQuinquenios: Math.floor(anosServico / 5),
+        adtsAtual: dadosProfessor.adtsAtual,
+        adtsCorreto: dadosProfessor.adtsAtual === calcularPercentualADTS(anosServico),
         detalhes,
         situacao: 'em_estagio'
       };
@@ -263,6 +291,10 @@ export class CalculadoraLetras {
       progressaoDecreto: temDireitoDecreto,
       progressaoLCE405: temDireitoLCE405,
       progressaoLCE503: temDireitoLCE503,
+      adtsPercentual: calcularPercentualADTS(anosServico),
+      adtsQuinquenios: Math.floor(anosServico / 5),
+      adtsAtual: dadosProfessor.adtsAtual,
+      adtsCorreto: dadosProfessor.adtsAtual === calcularPercentualADTS(anosServico),
       detalhes,
       situacao,
       retroativo: this.calcularRetroativo(dadosProfessor)
@@ -399,14 +431,25 @@ export class CalculadoraLetras {
         // Calcular a letra correta para esta data específica
         const indiceLetraCorretaNoMes = calcularLetraCorretaParaData(dataIteracao);
         
-        const vencimentoCorreto = vencimentosAno[indiceLetraCorretaNoMes][dadosProfessor.nivel - 1];
-        const vencimentoRecebido = vencimentosAno[indiceLetraAtual][dadosProfessor.nivel - 1];
+        // Calcular ADTS para a data específica
+        const anosServicoNaData = ano - dadosProfessor.anoIngresso;
+        const adtsCorreto = calcularPercentualADTS(anosServicoNaData);
+        const adtsAtual = dadosProfessor.adtsAtual; // Usar o ADTS informado pelo usuário
+        
+        // Aplicar ADTS nos vencimentos
+        const vencimentoBaseCorreto = vencimentosAno[indiceLetraCorretaNoMes][dadosProfessor.nivel - 1];
+        const vencimentoBaseRecebido = vencimentosAno[indiceLetraAtual][dadosProfessor.nivel - 1];
+        
+        const vencimentoCorreto = vencimentoBaseCorreto * (1 + adtsCorreto / 100);
+        const vencimentoRecebido = vencimentoBaseRecebido * (1 + adtsAtual / 100);
+        
         const diferenca = vencimentoCorreto - vencimentoRecebido;
         
         // Log de debug para cada mês
         const letraCorreta = LETRAS[indiceLetraCorretaNoMes];
         const letraAtual = LETRAS[indiceLetraAtual];
-        console.log(`DEBUG RETROATIVO - Mês: ${mes}/${ano} | Letra Correta: ${letraCorreta} | Letra Atual: ${letraAtual} | Vencimento Correto: R$ ${vencimentoCorreto.toFixed(2)} | Vencimento Recebido: R$ ${vencimentoRecebido.toFixed(2)} | Diferença: R$ ${diferenca.toFixed(2)}`);
+        const valorADTS = vencimentoBaseCorreto * (adtsCorreto / 100);
+        console.log(`DEBUG RETROATIVO - Mês: ${mes}/${ano} | Letra Correta: ${letraCorreta} | Letra Atual: ${letraAtual} | ADTS: ${adtsCorreto}% (R$ ${valorADTS.toFixed(2)}) | Vencimento Correto: R$ ${vencimentoCorreto.toFixed(2)} | Vencimento Recebido: R$ ${vencimentoRecebido.toFixed(2)} | Diferença: R$ ${diferenca.toFixed(2)}`);
         
         if (diferenca > 0) {
           valorTotal += diferenca;
