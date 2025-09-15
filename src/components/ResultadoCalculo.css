@@ -449,6 +449,113 @@
   color: inherit;
 }
 
+/* Estilos para as seções das leis */
+.lei-item {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #007bff;
+}
+
+.lei-item h5 {
+  margin: 0 0 8px 0;
+  color: #007bff !important;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.lei-item p {
+  margin: 8px 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
 .resultado-container {
   color: #333 !important;
+}
+
+/* Seção de Retroativo */
+.retroativo-section {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white !important;
+  border-radius: 12px;
+  padding: 25px;
+  margin: 20px 0;
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.2);
+}
+
+.retroativo-section h4 {
+  color: white !important;
+  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.retroativo-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.valor-principal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 15px 20px;
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+}
+
+.valor-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: white !important;
+}
+
+.valor-destaque {
+  font-size: 24px;
+  font-weight: bold;
+  color: white !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.retroativo-section .info-grid {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 15px;
+}
+
+.retroativo-section .info-label,
+.retroativo-section .info-value {
+  color: white !important;
+}
+
+.observacao-prescricao {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 15px;
+  border-left: 4px solid rgba(255, 255, 255, 0.5);
+}
+
+.observacao-prescricao p {
+  margin: 0;
+  color: white !important;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Responsividade para retroativo */
+@media (max-width: 768px) {
+  .valor-principal {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+  
+  .valor-destaque {
+    font-size: 20px;
+  }
 }
