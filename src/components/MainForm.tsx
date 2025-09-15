@@ -8,11 +8,10 @@ interface FormData {
   email: string;
   whatsapp: string;
   anoIngresso: number;
-  adtsAtual: number;
   possuiProcessos: boolean;
-  nivelAtual: string;
   letraAtual: string;
   nivel: string; // I, II, III, IV, V, VI
+  adtsAtual: number; // Percentual de ADTS que o professor recebe atualmente (0-35%)
 }
 
 interface FormErrors {
@@ -20,11 +19,10 @@ interface FormErrors {
   email?: string;
   whatsapp?: string;
   anoIngresso?: string;
-  adtsAtual?: string;
   possuiProcessos?: string;
-  nivelAtual?: string;
   letraAtual?: string;
   nivel?: string;
+  adtsAtual?: string;
 }
 
 const MainForm: React.FC = () => {
@@ -33,11 +31,10 @@ const MainForm: React.FC = () => {
     email: '',
     whatsapp: '',
     anoIngresso: new Date().getFullYear(),
-    adtsAtual: 0,
     possuiProcessos: false,
-    nivelAtual: '',
     letraAtual: '',
-    nivel: 'I'
+    nivel: 'I',
+    adtsAtual: 0
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -63,12 +60,6 @@ const MainForm: React.FC = () => {
   // Gerar anos de 1900 a 2025
   const anos = Array.from({ length: 126 }, (_, i) => 1900 + i);
   
-  // Gerar opções de ADTS de 0% a 35% pulando de 5 em 5
-  const adtsOptions = Array.from({ length: 8 }, (_, i) => i * 5);
-  
-  // Opções de nível
-  const niveisEducacao = ['graduação', 'pós-graduação', 'mestrado', 'doutorado'];
-  
   // Letras de A a J
   const letras = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 
@@ -81,7 +72,9 @@ const MainForm: React.FC = () => {
     } else if (type === 'checkbox') {
       const checked = (e.target as HTMLInputElement).checked;
       setFormData(prev => ({ ...prev, [name]: checked }));
-    } else if (name === 'anoIngresso' || name === 'adtsAtual') {
+    } else if (name === 'anoIngresso') {
+      setFormData(prev => ({ ...prev, [name]: parseInt(value) || 0 }));
+    } else if (name === 'adtsAtual') {
       setFormData(prev => ({ ...prev, [name]: parseInt(value) || 0 }));
     } else {
       setFormData(prev => ({ ...prev, [name]: value }));
@@ -116,16 +109,16 @@ const MainForm: React.FC = () => {
       newErrors.anoIngresso = 'Ano deve estar entre 1900 e 2025';
     }
 
-    if (!formData.nivelAtual) {
-      newErrors.nivelAtual = 'Nível atual é obrigatório';
-    }
-
     if (!formData.letraAtual) {
       newErrors.letraAtual = 'Letra atual é obrigatória';
     }
 
     if (!formData.nivel) {
       newErrors.nivel = 'Nível da carreira é obrigatório';
+    }
+
+    if (formData.adtsAtual < 0 || formData.adtsAtual > 35) {
+      newErrors.adtsAtual = 'ADTS deve estar entre 0% e 35%';
     }
 
     // Validação de consistência: verificar se letra e nível são compatíveis
@@ -184,7 +177,8 @@ const MainForm: React.FC = () => {
         const dadosProfessor: DadosProfessor = {
           anoIngresso: formData.anoIngresso,
           letraAtual: formData.letraAtual,
-          nivel: ['I', 'II', 'III', 'IV', 'V', 'VI'].indexOf(formData.nivel) + 1
+          nivel: ['I', 'II', 'III', 'IV', 'V', 'VI'].indexOf(formData.nivel) + 1,
+          adtsAtual: formData.adtsAtual
         };
 
         // Calcular letra devida
@@ -275,21 +269,6 @@ const MainForm: React.FC = () => {
           {errors.anoIngresso && <span className="error-message">{errors.anoIngresso}</span>}
         </div>
 
-        {/* ADTS Atual */}
-        <div className="form-group">
-          <label htmlFor="adtsAtual">ADTS Atual</label>
-          <select
-            id="adtsAtual"
-            name="adtsAtual"
-            value={formData.adtsAtual}
-            onChange={handleInputChange}
-          >
-            {adtsOptions.map(adts => (
-              <option key={adts} value={adts}>{adts}%</option>
-            ))}
-          </select>
-        </div>
-
         {/* Processos em relação a atraso de letras */}
         <div className="form-group checkbox-group">
           <label className="checkbox-label">
@@ -301,24 +280,6 @@ const MainForm: React.FC = () => {
             />
             Você já possui processos em relação a atraso de letras?
           </label>
-        </div>
-
-        {/* Nível Atual */}
-        <div className="form-group">
-          <label htmlFor="nivelAtual">Nível Atual *</label>
-          <select
-            id="nivelAtual"
-            name="nivelAtual"
-            value={formData.nivelAtual}
-            onChange={handleInputChange}
-            className={errors.nivelAtual ? 'error' : ''}
-          >
-            <option value="">Selecione o nível</option>
-            {niveisEducacao.map(nivel => (
-              <option key={nivel} value={nivel}>{nivel}</option>
-            ))}
-          </select>
-          {errors.nivelAtual && <span className="error-message">{errors.nivelAtual}</span>}
         </div>
 
         {/* Letra Atual */}
@@ -339,9 +300,9 @@ const MainForm: React.FC = () => {
           {errors.letraAtual && <span className="error-message">{errors.letraAtual}</span>}
         </div>
 
-        {/* Nível da Carreira */}
+        {/* Nível de titulação */}
         <div className="form-group">
-          <label htmlFor="nivel">Nível da Carreira *</label>
+          <label htmlFor="nivel">Nível de titulação *</label>
           <select
             id="nivel"
             name="nivel"
@@ -349,14 +310,36 @@ const MainForm: React.FC = () => {
             onChange={handleInputChange}
             className={errors.nivel ? 'error' : ''}
           >
-            <option value="I">I</option>
-            <option value="II">II</option>
-            <option value="III">III</option>
-            <option value="IV">IV</option>
-            <option value="V">V</option>
-            <option value="VI">VI</option>
+            <option value="I">I - Magistério</option>
+            <option value="II">II - Lic. Curta</option>
+            <option value="III">III - Lic. Plena</option>
+            <option value="IV">IV - Especialista</option>
+            <option value="V">V - Mestrado</option>
+            <option value="VI">VI - Doutorado</option>
           </select>
           {errors.nivel && <span className="error-message">{errors.nivel}</span>}
+        </div>
+
+        {/* ADTS Atual */}
+        <div className="form-group">
+          <label htmlFor="adtsAtual">ADTS Atual (%) *</label>
+          <select
+            id="adtsAtual"
+            name="adtsAtual"
+            value={formData.adtsAtual}
+            onChange={handleInputChange}
+            className={errors.adtsAtual ? 'error' : ''}
+          >
+            <option value={0}>0%</option>
+            <option value={5}>5%</option>
+            <option value={10}>10%</option>
+            <option value={15}>15%</option>
+            <option value={20}>20%</option>
+            <option value={25}>25%</option>
+            <option value={30}>30%</option>
+            <option value={35}>35%</option>
+          </select>
+          {errors.adtsAtual && <span className="error-message">{errors.adtsAtual}</span>}
         </div>
 
         {/* Botão de Submit */}

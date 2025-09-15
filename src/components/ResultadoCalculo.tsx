@@ -60,6 +60,115 @@ const ResultadoCalculoComponent: React.FC<Props> = ({ resultado, proximaProgress
         </div>
 
         <hr className="separator" />
+        
+        {/* Cards ADTS lado a lado com seta sobreposta */}
+        <div className="letras-comparacao" style={{
+          borderRadius: '20px',
+          padding: '20px 15px',
+          margin: '20px 0',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'relative',
+          overflow: 'hidden',
+          color: '#ffffff'
+        }}>
+          <div className="cards-container">
+            <div 
+              className={`adts-card adts-atual ${resultado.adtsCorreto ? 'adts-correto' : 'adts-incorreto'}`}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '15px',
+                padding: '25px 15px',
+                borderRadius: '16px',
+                flex: 1,
+                maxWidth: '180px',
+                minWidth: '140px',
+                boxShadow: '0 6px 20px rgba(0, 0, 0, 0.1)',
+                transition: 'transform 0.2s ease',
+                background: resultado.adtsCorreto ? 
+                  'linear-gradient(135deg, #28a745 0%, #20c997 100%)' : 
+                  'linear-gradient(135deg, #dc3545 0%, #c82333 100%)',
+                  color: 'white'
+                }}
+            >
+              <div className="adts-header" style={{
+                fontSize: '12px',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.8px',
+                textAlign: 'center',
+                whiteSpace: 'nowrap',
+                color: 'white',
+                WebkitTextFillColor: 'white'
+              }}>ADTS Atual</div>
+              <div className="adts-valor" style={{
+                fontSize: '32px',
+                fontWeight: 900,
+                width: '80px',
+                height: '80px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'rgba(255, 255, 255, 0.2)',
+                backdropFilter: 'blur(10px)',
+                border: '2px solid rgba(255, 255, 255, 0.3)',
+                color: 'white',
+                WebkitTextFillColor: 'white'
+              }}>{resultado.adtsAtual}%</div>
+            </div>
+            <div 
+              className="adts-card adts-calculado"
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '15px',
+                padding: '25px 15px',
+                borderRadius: '16px',
+                flex: 1,
+                maxWidth: '180px',
+                minWidth: '140px',
+                boxShadow: '0 6px 20px rgba(0, 0, 0, 0.1)',
+                transition: 'transform 0.2s ease',
+                background: 'linear-gradient(135deg, #17a2b8 0%, #138496 100%)',
+                color: 'white'
+              }}
+            >
+              <div className="adts-header" style={{
+                fontSize: '12px',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.8px',
+                textAlign: 'center',
+                whiteSpace: 'nowrap',
+                color: 'white',
+                WebkitTextFillColor: 'white'
+              }}>ADTS Correto</div>
+              <div className="adts-valor" style={{
+                fontSize: '32px',
+                fontWeight: 900,
+                width: '80px',
+                height: '80px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'rgba(255, 255, 255, 0.2)',
+                backdropFilter: 'blur(10px)',
+                border: '2px solid rgba(255, 255, 255, 0.3)',
+                color: 'white',
+                WebkitTextFillColor: 'white'
+              }}>{resultado.adtsPercentual}%</div>
+            </div>
+            <div className="arrow-overlay">→</div>
+          </div>
+        </div>
+
+        <hr className="separator" />
 
         {/* Informações de Serviço */}
         <div className="info-section">
@@ -68,6 +177,10 @@ const ResultadoCalculoComponent: React.FC<Props> = ({ resultado, proximaProgress
             <div className="info-pair">
               <span className="info-label">Anos de Serviço:</span>
               <span className="info-value">{resultado.anosServico} anos</span>
+            </div>
+            <div className="info-pair">
+              <span className="info-label">ADTS (Quinquênios):</span>
+              <span className="info-value">{resultado.adtsQuinquenios} × 5% = {resultado.adtsPercentual}%</span>
             </div>
             <div className="info-pair">
               <span className="info-label">Progressões Normais:</span>
