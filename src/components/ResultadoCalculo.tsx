@@ -150,29 +150,29 @@ const ResultadoCalculoComponent: React.FC<Props> = ({ resultado, proximaProgress
             <div className="bg-gradient-green rounded-2xl shadow-lg p-8 text-white">
               <h4 className="text-2xl font-bold text-center mb-6">💰 Valor Retroativo a Receber</h4>
               <div className="space-y-6">
-                <div className="flex justify-between items-center bg-white/15 backdrop-blur-sm rounded-lg p-4">
-                  <span className="text-base font-semibold">Valor Total:</span>
-                  <span className="text-2xl font-bold">
-                    R$ {resultado.retroativo.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                  </span>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium">Período:</span>
-                    <span className="font-semibold">
-                      {resultado.retroativo.dataInicio.toLocaleDateString('pt-BR')} até {resultado.retroativo.dataFim.toLocaleDateString('pt-BR')}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium">Meses contemplados:</span>
-                    <span className="font-semibold">{resultado.retroativo.meses} meses</span>
-                  </div>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border-l-4 border-white/50">
-                  <p className="text-sm leading-relaxed">
-                    <strong>⚖️ Observação:</strong> Valores calculados respeitando a prescrição quinquenal (últimos 5 anos).
-                  </p>
-                </div>
+          <div className="flex flex-col items-center bg-white/15 backdrop-blur-sm rounded-lg p-4 space-y-2">
+            <span className="text-base font-semibold text-center">Valor Total:</span>
+            <span className="text-2xl font-bold text-center break-words">
+              R$ {resultado.retroativo.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+          </div>
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+              <span className="font-medium">Período:</span>
+              <span className="font-semibold text-right sm:text-left">
+                {resultado.retroativo.dataInicio.toLocaleDateString('pt-BR')} até {resultado.retroativo.dataFim.toLocaleDateString('pt-BR')}
+              </span>
+            </div>
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+              <span className="font-medium">Meses contemplados:</span>
+              <span className="font-semibold text-right sm:text-left">{resultado.retroativo.meses} meses</span>
+            </div>
+          </div>
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border-l-4 border-white/50">
+            <p className="text-sm leading-relaxed">
+              <strong>⚖️ Observação:</strong> Valores calculados respeitando a prescrição quinquenal (últimos 5 anos).
+            </p>
+          </div>
               </div>
             </div>
             <hr className="border-gray-300" />
