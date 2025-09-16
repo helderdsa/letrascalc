@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { CalculadoraLetras, type DadosProfessor, type ResultadoCalculo } from '../utils/calculadoraLetras';
 import ResultadoCalculoComponent from './ResultadoCalculo';
-import './MainForm.css';
 
 interface FormData {
   nomeCompleto: string;
@@ -192,8 +191,6 @@ const MainForm: React.FC = () => {
         setProximaProgressao(proximaProgressaoData);
         setMostrarResultado(true);
 
-        console.log('Dados do formulário:', formData);
-        console.log('Resultado do cálculo:', resultadoCalculo);
       } catch (error) {
         console.error('Erro no cálculo:', error);
         setErrors({
@@ -204,41 +201,61 @@ const MainForm: React.FC = () => {
   };
 
   return (
-    <div className="main-form-container">
-      <h2>Calculadora de Letras - Dados Pessoais</h2>
-      
-      <form onSubmit={handleSubmit} className="main-form">
+    <div className="w-full max-w-2xl mx-auto" style={{ width: '672px', maxWidth: '90vw' }}>
+      <div className="w-full bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-8 mb-8 overflow-hidden">
+        <h2 className="text-3xl font-bold text-gray-800 text-center mb-8">Verifique sua progressão de letras!</h2>
+        <h6 className="font-bold text-gray-800 text-center mb-8">Não deixe seus direitos de progressão para depois!</h6>
+        
+        <form onSubmit={handleSubmit} className="space-y-6">
         {/* Nome Completo */}
-        <div className="form-group">
-          <label htmlFor="nomeCompleto">Nome Completo *</label>
+        <div className="space-y-2">
+          <label htmlFor="nomeCompleto" className="block text-sm font-semibold text-gray-700">
+            Nome Completo *
+          </label>
           <input
             type="text"
             id="nomeCompleto"
             name="nomeCompleto"
             value={formData.nomeCompleto}
             onChange={handleInputChange}
-            className={errors.nomeCompleto ? 'error' : ''}
+            className={`w-full px-4 py-3 rounded-lg border-2 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+              errors.nomeCompleto 
+                ? 'border-red-500 bg-red-50' 
+                : 'border-gray-300 hover:border-gray-400 focus:border-orange-500'
+            }`}
           />
-          {errors.nomeCompleto && <span className="error-message">{errors.nomeCompleto}</span>}
+          {errors.nomeCompleto && (
+            <span className="text-red-500 text-sm font-medium">{errors.nomeCompleto}</span>
+          )}
         </div>
 
         {/* Email */}
-        <div className="form-group">
-          <label htmlFor="email">Email *</label>
+        <div className="space-y-2">
+          <label htmlFor="email" className="block text-sm font-semibold text-gray-700">
+            Email *
+          </label>
           <input
             type="email"
             id="email"
             name="email"
             value={formData.email}
             onChange={handleInputChange}
-            className={errors.email ? 'error' : ''}
+            className={`w-full px-4 py-3 rounded-lg border-2 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+              errors.email 
+                ? 'border-red-500 bg-red-50' 
+                : 'border-gray-300 hover:border-gray-400 focus:border-orange-500'
+            }`}
           />
-          {errors.email && <span className="error-message">{errors.email}</span>}
+          {errors.email && (
+            <span className="text-red-500 text-sm font-medium">{errors.email}</span>
+          )}
         </div>
 
         {/* WhatsApp */}
-        <div className="form-group">
-          <label htmlFor="whatsapp">Número do WhatsApp *</label>
+        <div className="space-y-2">
+          <label htmlFor="whatsapp" className="block text-sm font-semibold text-gray-700">
+            Número do WhatsApp *
+          </label>
           <input
             type="text"
             id="whatsapp"
@@ -247,68 +264,99 @@ const MainForm: React.FC = () => {
             onChange={handleInputChange}
             placeholder="(99) 99999-9999"
             maxLength={15}
-            className={errors.whatsapp ? 'error' : ''}
+            className={`w-full px-4 py-3 rounded-lg border-2 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+              errors.whatsapp 
+                ? 'border-red-500 bg-red-50' 
+                : 'border-gray-300 hover:border-gray-400 focus:border-orange-500'
+            }`}
           />
-          {errors.whatsapp && <span className="error-message">{errors.whatsapp}</span>}
+          {errors.whatsapp && (
+            <span className="text-red-500 text-sm font-medium">{errors.whatsapp}</span>
+          )}
         </div>
 
         {/* Ano de Ingresso */}
-        <div className="form-group">
-          <label htmlFor="anoIngresso">Ano de Ingresso no Serviço Público *</label>
+        <div className="space-y-2">
+          <label htmlFor="anoIngresso" className="block text-sm font-semibold text-gray-700">
+            Ano de Ingresso no Serviço Público *
+          </label>
           <select
             id="anoIngresso"
             name="anoIngresso"
             value={formData.anoIngresso}
             onChange={handleInputChange}
-            className={errors.anoIngresso ? 'error' : ''}
+            className={`w-full px-4 py-3 rounded-lg border-2 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+              errors.anoIngresso 
+                ? 'border-red-500 bg-red-50' 
+                : 'border-gray-300 hover:border-gray-400 focus:border-orange-500'
+            }`}
           >
             {anos.map(ano => (
               <option key={ano} value={ano}>{ano}</option>
             ))}
           </select>
-          {errors.anoIngresso && <span className="error-message">{errors.anoIngresso}</span>}
+          {errors.anoIngresso && (
+            <span className="text-red-500 text-sm font-medium">{errors.anoIngresso}</span>
+          )}
         </div>
 
         {/* Processos em relação a atraso de letras */}
-        <div className="form-group checkbox-group">
-          <label className="checkbox-label">
+        <div className="space-y-2">
+          <label className="flex items-center space-x-3 cursor-pointer">
             <input
               type="checkbox"
               name="possuiProcessos"
               checked={formData.possuiProcessos}
               onChange={handleInputChange}
+              className="w-5 h-5 text-orange-500 border-2 border-gray-300 rounded focus:ring-orange-500 focus:ring-2"
             />
-            Você já possui processos em relação a atraso de letras?
+            <span className="text-sm font-medium text-gray-700">
+              Você já possui processos em relação a atraso de letras?
+            </span>
           </label>
         </div>
 
         {/* Letra Atual */}
-        <div className="form-group">
-          <label htmlFor="letraAtual">Letra Atual *</label>
+        <div className="space-y-2">
+          <label htmlFor="letraAtual" className="block text-sm font-semibold text-gray-700">
+            Letra Atual *
+          </label>
           <select
             id="letraAtual"
             name="letraAtual"
             value={formData.letraAtual}
             onChange={handleInputChange}
-            className={errors.letraAtual ? 'error' : ''}
+            className={`w-full px-4 py-3 rounded-lg border-2 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+              errors.letraAtual 
+                ? 'border-red-500 bg-red-50' 
+                : 'border-gray-300 hover:border-gray-400 focus:border-orange-500'
+            }`}
           >
             <option value="">Selecione a letra</option>
             {letras.map(letra => (
               <option key={letra} value={letra}>{letra}</option>
             ))}
           </select>
-          {errors.letraAtual && <span className="error-message">{errors.letraAtual}</span>}
+          {errors.letraAtual && (
+            <span className="text-red-500 text-sm font-medium">{errors.letraAtual}</span>
+          )}
         </div>
 
         {/* Nível de titulação */}
-        <div className="form-group">
-          <label htmlFor="nivel">Nível de titulação *</label>
+        <div className="space-y-2">
+          <label htmlFor="nivel" className="block text-sm font-semibold text-gray-700">
+            Nível de titulação *
+          </label>
           <select
             id="nivel"
             name="nivel"
             value={formData.nivel}
             onChange={handleInputChange}
-            className={errors.nivel ? 'error' : ''}
+            className={`w-full px-4 py-3 rounded-lg border-2 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+              errors.nivel 
+                ? 'border-red-500 bg-red-50' 
+                : 'border-gray-300 hover:border-gray-400 focus:border-orange-500'
+            }`}
           >
             <option value="I">I - Magistério</option>
             <option value="II">II - Lic. Curta</option>
@@ -317,18 +365,26 @@ const MainForm: React.FC = () => {
             <option value="V">V - Mestrado</option>
             <option value="VI">VI - Doutorado</option>
           </select>
-          {errors.nivel && <span className="error-message">{errors.nivel}</span>}
+          {errors.nivel && (
+            <span className="text-red-500 text-sm font-medium">{errors.nivel}</span>
+          )}
         </div>
 
         {/* ADTS Atual */}
-        <div className="form-group">
-          <label htmlFor="adtsAtual">ADTS Atual (%) *</label>
+        <div className="space-y-2">
+          <label htmlFor="adtsAtual" className="block text-sm font-semibold text-gray-700">
+            ADTS Atual (%) *
+          </label>
           <select
             id="adtsAtual"
             name="adtsAtual"
             value={formData.adtsAtual}
             onChange={handleInputChange}
-            className={errors.adtsAtual ? 'error' : ''}
+            className={`w-full px-4 py-3 rounded-lg border-2 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+              errors.adtsAtual 
+                ? 'border-red-500 bg-red-50' 
+                : 'border-gray-300 hover:border-gray-400 focus:border-orange-500'
+            }`}
           >
             <option value={0}>0%</option>
             <option value={5}>5%</option>
@@ -339,16 +395,22 @@ const MainForm: React.FC = () => {
             <option value={30}>30%</option>
             <option value={35}>35%</option>
           </select>
-          {errors.adtsAtual && <span className="error-message">{errors.adtsAtual}</span>}
+          {errors.adtsAtual && (
+            <span className="text-red-500 text-sm font-medium">{errors.adtsAtual}</span>
+          )}
         </div>
 
         {/* Botão de Submit */}
-        <div className="form-group">
-          <button type="submit" className="submit-button">
-            Calcular Letras
+        <div className="pt-4">
+          <button 
+            type="submit" 
+            className="w-full bg-gradient-orange hover:opacity-90 text-white font-bold py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-orange-300 shadow-lg"
+          >
+            Calcular Agora
           </button>
         </div>
-      </form>
+        </form>
+      </div>
 
       {/* Resultado do Cálculo */}
       {mostrarResultado && (
