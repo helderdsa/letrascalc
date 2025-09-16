@@ -400,13 +400,22 @@ const MainForm: React.FC = () => {
           )}
         </div>
 
+        {/* Alerta sobre aplicabilidade do cálculo */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start space-x-3">
+          <div className="flex-1">
+            <p className="text-sm text-blue-800 font-medium">
+              ℹ️ <strong>Importante:</strong> Este cálculo se aplica exclusivamente a servidores do estado do Rio Grande do Norte (RN).
+            </p>
+          </div>
+        </div>
+
         {/* Botão de Submit */}
         <div className="pt-4">
           <button 
             type="submit" 
             className="w-full bg-gradient-orange hover:opacity-90 text-white font-bold py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-orange-300 shadow-lg"
           >
-            Calcular Agora
+            Calcule Agora!
           </button>
         </div>
         </form>
