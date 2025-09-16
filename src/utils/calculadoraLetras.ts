@@ -140,7 +140,7 @@ export class CalculadoraLetras {
     const detalhes: string[] = [];
     
     // detalhes.push(`Ingresso no serviço público: ${dadosProfessor.anoIngresso}`);
-    detalhes.push(`Anos de serviço: ${anosServico} anos`);
+    // detalhes.push(`Anos de serviço: ${anosServico} anos`);
     
     // Calcular ADTS
     const percentualADTS = calcularPercentualADTS(anosServico);
@@ -179,7 +179,7 @@ export class CalculadoraLetras {
     
     // Concluiu estágio probatório
     const dataFimEstagio = new Date(dadosProfessor.anoIngresso + ANOS_ESTAGIO_PROBATORIO, 0, 1);
-    detalhes.push(`Estágio probatório concluído em: ${dataFimEstagio.getFullYear()}`);
+    // detalhes.push(`Estágio probatório concluído em: ${dataFimEstagio.getFullYear()}`);
     
     // Verificar se tem direito ao decreto 30.974/2021
     const temDireitoDecreto = dataFimEstagio <= DATA_DECRETO;

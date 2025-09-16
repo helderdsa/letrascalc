@@ -1,4 +1,5 @@
 import MainForm from "./components/MainForm";
+import WhatsAppButton from "./components/WhatsAppButton";
 
 function App() {
   return (
@@ -233,6 +234,7 @@ function App() {
         </svg>
       </div>
       <MainForm />
+      <WhatsAppButton phoneNumber="558440421416" message="Olá! Gostaria de calcular minha progressão de carreira." />
     </div>
   );
 }
