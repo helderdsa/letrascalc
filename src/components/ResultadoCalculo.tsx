@@ -187,7 +187,7 @@ const ResultadoCalculoComponent: React.FC<Props> = ({ resultado, proximaProgress
           <div className="space-y-2">
             {resultado.detalhes.map((detalhe, index) => (
               <div key={index} className="p-3 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700">
-                {detalhe}
+                <span dangerouslySetInnerHTML={{ __html: detalhe }} />
               </div>
             ))}
           </div>

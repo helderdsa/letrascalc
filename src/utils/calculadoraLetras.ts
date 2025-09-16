@@ -151,7 +151,7 @@ export class CalculadoraLetras {
     if (dadosProfessor.adtsAtual === percentualADTS) {
       detalhes.push(`✅ ADTS atual (${dadosProfessor.adtsAtual}%) está correto`);
     } else {
-      detalhes.push(`⚠️ ADTS atual (${dadosProfessor.adtsAtual}%) está INCORRETO - deveria ser ${percentualADTS}%`);
+      detalhes.push(`⚠️ ADTS atual (${dadosProfessor.adtsAtual}%) está INCORRETO - <strong>deveria ser ${percentualADTS}%</strong>`);
     }
     
     // Verificar se ainda está em estágio probatório
@@ -187,7 +187,7 @@ export class CalculadoraLetras {
     
     if (temDireitoDecreto) {
       progressaoDecreto = 2;
-      detalhes.push(`✅ Tem direito ao Decreto 30.974/2021 (2 letras extras)`);
+      detalhes.push(`✅ Tem direito ao Decreto 30.974/2021 <strong>(2 letras extras)</strong>`);
       // detalhes.push(`  - Estágio probatório concluído antes de 15/10/2021`);
     } else {
       detalhes.push(`❌ Não tem direito ao Decreto 30.974/2021`);
@@ -200,7 +200,7 @@ export class CalculadoraLetras {
     
     if (temDireitoLCE405) {
       progressaoLCE405 = 1;
-      detalhes.push(`✅ Tem direito à LCE 405/2009 (1 letra extra)`);
+      detalhes.push(`✅ Tem direito à LCE 405/2009 <strong>(1 letra extra)</strong>`);
       // detalhes.push(`  - Estágio probatório concluído antes de 02/08/2009`);
     } else {
       detalhes.push(`❌ Não tem direito à LCE 405/2009`);
@@ -213,7 +213,7 @@ export class CalculadoraLetras {
     
     if (temDireitoLCE503) {
       progressaoLCE503 = 1;
-      detalhes.push(`✅ Tem direito à LCE 503/2014 (1 letra extra)`);
+      detalhes.push(`✅ Tem direito à LCE 503/2014 <strong>(1 letra extra)</strong>`);
       // detalhes.push(`  - Estágio probatório concluído antes de 27/03/2014`);
     } else {
       detalhes.push(`❌ Não tem direito à LCE 503/2014`);

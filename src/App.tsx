@@ -10,8 +10,7 @@ function App() {
           xmlns="http://www.w3.org/2000/svg"
           version="1.1"
           viewBox="0 0 455.24 160.64"
-          width="455.239990234375"
-          height="160.63999938964844"
+          className="w-full max-w-md lg:max-w-lg xl:max-w-xl h-auto"
         >
           {/* <!-- Generator: Adobe Illustrator 29.8.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 2)  --> */}
           <defs>
