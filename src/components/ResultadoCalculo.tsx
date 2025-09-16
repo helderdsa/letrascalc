@@ -148,7 +148,7 @@ const ResultadoCalculoComponent: React.FC<Props> = ({ resultado, proximaProgress
         {resultado.retroativo && (
           <>
             <div className="bg-gradient-green rounded-2xl shadow-lg p-8 text-white">
-              <h4 className="text-2xl font-bold text-center mb-6">💰 Valor Retroativo a Receber</h4>
+              <h4 className="text-2xl font-bold text-center mb-6">💰 Estimativa de Valor Retroativo a Receber</h4>
               <div className="space-y-6">
           <div className="flex flex-col items-center bg-white/15 backdrop-blur-sm rounded-lg p-4 space-y-2">
             <span className="text-base font-semibold text-center">Valor Total:</span>
