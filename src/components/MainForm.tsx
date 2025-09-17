@@ -116,52 +116,7 @@ const MainForm: React.FC = () => {
       newErrors.nivel = 'Nível da carreira é obrigatório';
     }
 
-    if (formData.adtsAtual < 0 || formData.adtsAtual > 35) {
-      newErrors.adtsAtual = 'ADTS deve estar entre 0% e 35%';
-    }
-
     // Validação de consistência: verificar se letra e nível são compatíveis
-    if (formData.letraAtual && formData.nivel) {
-      const letraIndex = letras.indexOf(formData.letraAtual);
-      const nivelIndex = ['I', 'II', 'III', 'IV', 'V', 'VI'].indexOf(formData.nivel);
-      
-      if (letraIndex === -1) {
-        newErrors.letraAtual = 'Letra inválida';
-      }
-      
-      if (nivelIndex === -1) {
-        newErrors.nivel = 'Nível inválido';
-      }
-      
-      // Verificar se a combinação letra/nível é realística
-      if (letraIndex >= 0 && nivelIndex >= 0) {
-        // Professores iniciantes (letra A) normalmente estão em níveis mais baixos
-        if (formData.letraAtual === 'A' && nivelIndex > 3) {
-          newErrors.nivel = 'Professores na letra A raramente possuem nível V ou VI';
-        }
-        
-        // Professores experientes (letra I, J) normalmente estão em níveis mais altos
-        if ((formData.letraAtual === 'I' || formData.letraAtual === 'J') && nivelIndex < 2) {
-          newErrors.nivel = 'Professores em letras avançadas normalmente possuem nível III ou superior';
-        }
-      }
-    }
-
-    // Validação de ano de ingresso x letra atual
-    if (formData.anoIngresso && formData.letraAtual) {
-      const anosServico = new Date().getFullYear() - formData.anoIngresso;
-      const letraIndex = letras.indexOf(formData.letraAtual);
-      
-      // Professor com poucos anos de serviço não deveria ter letra muito alta
-      if (anosServico <= 5 && letraIndex > 2) {
-        newErrors.letraAtual = 'Letra muito alta para o tempo de serviço informado';
-      }
-      
-      // Professor com muitos anos de serviço deveria ter progredido
-      if (anosServico >= 15 && letraIndex === 0) {
-        newErrors.letraAtual = 'Professor com 15+ anos normalmente já progrediu da letra A';
-      }
-    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
