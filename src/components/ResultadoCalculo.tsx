@@ -46,36 +46,38 @@ const ResultadoCalculoComponent: React.FC<Props> = ({ resultado, proximaProgress
 
       <div className="space-y-8">
         {/* Resumo Principal - Letras lado a lado com seta sobreposta */}
-        <ComparisonContainer 
-          arrowColor="text-gray-600"
-        >
+        <ComparisonContainer>
           <ComparisonCard
             title="Letra Atual"
             value={resultado.letraAtual}
+            rounded="rounded-l-2xl"
             backgroundGradient="bg-gradient-to-br from-blue-500 to-purple-600"
-            valueTextSize="text-6xl"
+            valueTextSize="text-3xl"
           />
           <ComparisonCard
             title="Letra Correta"
             value={resultado.letraCalculada}
+            rounded="rounded-r-2xl"
             backgroundGradient="bg-gradient-to-br from-purple-600 to-pink-500"
-            valueTextSize="text-6xl"
+            valueTextSize="text-3xl"
           />
         </ComparisonContainer>
 
         <hr className="border-gray-300" />
         
         {/* Cards ADTS lado a lado com seta sobreposta */}
-        <ComparisonContainer arrowColor="text-gray-600">
+        <ComparisonContainer>
           <ComparisonCard
             title="ADTS Atual"
             value={`${resultado.adtsAtual}%`}
+            rounded="rounded-l-2xl"
             backgroundGradient={resultado.adtsCorreto ? 'bg-gradient-green' : 'bg-gradient-red'}
             valueTextSize="text-3xl"
           />
           <ComparisonCard
             title="ADTS Correto"
             value={`${resultado.adtsPercentual}%`}
+            rounded="rounded-r-2xl"
             backgroundGradient="bg-gradient-blue"
             valueTextSize="text-3xl"
           />
