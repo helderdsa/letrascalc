@@ -139,13 +139,9 @@ export class CalculadoraLetras {
     const anosServico = anoAtual - dadosProfessor.anoIngresso;
     const detalhes: string[] = [];
     
-    // detalhes.push(`Ingresso no serviço público: ${dadosProfessor.anoIngresso}`);
-    // detalhes.push(`Anos de serviço: ${anosServico} anos`);
     
     // Calcular ADTS
     const percentualADTS = calcularPercentualADTS(anosServico);
-    // const quinquenios = Math.floor(anosServico / 5);
-    // detalhes.push(`ADTS (Adicional por Tempo de Serviço): ${quinquenios} quinquênio(s) = ${percentualADTS}%`);
     
     // Verificar se o ADTS atual está correto
     if (dadosProfessor.adtsAtual === percentualADTS) {
@@ -156,8 +152,6 @@ export class CalculadoraLetras {
     
     // Verificar se ainda está em estágio probatório
     if (anosServico < ANOS_ESTAGIO_PROBATORIO) {
-      // const anosRestantes = ANOS_ESTAGIO_PROBATORIO - anosServico;
-      // detalhes.push(`Ainda em estágio probatório. Faltam ${anosRestantes} anos para concluir.`);
       
       return {
         letraCalculada: 'A',
@@ -179,7 +173,6 @@ export class CalculadoraLetras {
     
     // Concluiu estágio probatório
     const dataFimEstagio = new Date(dadosProfessor.anoIngresso + ANOS_ESTAGIO_PROBATORIO, 0, 1);
-    // detalhes.push(`Estágio probatório concluído em: ${dataFimEstagio.getFullYear()}`);
     
     // Verificar se tem direito ao decreto 30.974/2021
     const temDireitoDecreto = dataFimEstagio <= DATA_DECRETO;
@@ -188,10 +181,8 @@ export class CalculadoraLetras {
     if (temDireitoDecreto) {
       progressaoDecreto = 2;
       detalhes.push(`✅ Tem direito ao Decreto 30.974/2021 <strong>(2 letras extras)</strong>`);
-      // detalhes.push(`  - Estágio probatório concluído antes de 15/10/2021`);
     } else {
       detalhes.push(`❌ Não tem direito ao Decreto 30.974/2021`);
-      // detalhes.push(`  - Estágio probatório concluído após 15/10/2021`);
     }
     
     // Verificar se tem direito à LCE 405/2009
@@ -201,10 +192,8 @@ export class CalculadoraLetras {
     if (temDireitoLCE405) {
       progressaoLCE405 = 1;
       detalhes.push(`✅ Tem direito à LCE 405/2009 <strong>(1 letra extra)</strong>`);
-      // detalhes.push(`  - Estágio probatório concluído antes de 02/08/2009`);
     } else {
       detalhes.push(`❌ Não tem direito à LCE 405/2009`);
-      // detalhes.push(`  - Estágio probatório concluído após 02/08/2009`);
     }
     
     // Verificar se tem direito à LCE 503/2014
@@ -214,18 +203,14 @@ export class CalculadoraLetras {
     if (temDireitoLCE503) {
       progressaoLCE503 = 1;
       detalhes.push(`✅ Tem direito à LCE 503/2014 <strong>(1 letra extra)</strong>`);
-      // detalhes.push(`  - Estágio probatório concluído antes de 27/03/2014`);
     } else {
       detalhes.push(`❌ Não tem direito à LCE 503/2014`);
-      // detalhes.push(`  - Estágio probatório concluído após 27/03/2014`);
     }
     
     // Calcular progressões normais (a cada 2 anos após estágio probatório)
     const anosAposEstagio = anosServico - ANOS_ESTAGIO_PROBATORIO;
     const progressoesNormais = Math.floor(anosAposEstagio / ANOS_ENTRE_PROGRESSOES);
     
-    // detalhes.push(`Anos após estágio probatório: ${anosAposEstagio}`);
-    // detalhes.push(`Progressões normais (a cada 2 anos): ${progressoesNormais}`);
     
     // Calcular letra final
     let indiceLeira = 0; // Começa na letra A
@@ -233,7 +218,6 @@ export class CalculadoraLetras {
     // Primeira progressão: A para B (após estágio probatório)
     if (anosServico >= ANOS_ESTAGIO_PROBATORIO) {
       indiceLeira = 1; // B
-      // detalhes.push(`Progressão A → B (conclusão do estágio probatório)`);
     }
     
     // Aplicar progressões normais
@@ -242,29 +226,24 @@ export class CalculadoraLetras {
     // Aplicar decreto se aplicável
     if (temDireitoDecreto) {
       indiceLeira += progressaoDecreto;
-      // detalhes.push(`Aplicação do Decreto 30.974/2021: +${progressaoDecreto} letras`);
     }
     
     // Aplicar LCE 405/2009 se aplicável
     if (temDireitoLCE405) {
       indiceLeira += progressaoLCE405;
-      // detalhes.push(`Aplicação da LCE 405/2009: +${progressaoLCE405} letra`);
     }
     
     // Aplicar LCE 503/2014 se aplicável
     if (temDireitoLCE503) {
       indiceLeira += progressaoLCE503;
-      // detalhes.push(`Aplicação da LCE 503/2014: +${progressaoLCE503} letra`);
     }
     
     // Garantir que não ultrapasse a letra J
     if (indiceLeira >= LETRAS.length) {
       indiceLeira = LETRAS.length - 1;
-      // detalhes.push(`⚠️ Atingiu o topo da carreira (Letra J)`);
     }
     
     const letraCalculada = LETRAS[indiceLeira];
-    // detalhes.push(`Letra calculada: ${letraCalculada}`);
     
     // Determinar situação
     let situacao: ResultadoCalculo['situacao'] = 'atualizado';
