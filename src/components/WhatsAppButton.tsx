@@ -15,7 +15,6 @@ const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({
       const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
       window.open(whatsappUrl, '_blank');
     } else {
-      // Por enquanto, apenas um console.log quando não há número
       console.log('Número do WhatsApp não configurado');
     }
   };

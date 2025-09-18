@@ -100,8 +100,6 @@ const MainForm: React.FC = () => {
 
     if (!formData.whatsapp.trim()) {
       newErrors.whatsapp = 'WhatsApp é obrigatório';
-    } else if (formData.whatsapp.replace(/\D/g, '').length !== 11) {
-      newErrors.whatsapp = 'WhatsApp deve ter 11 dígitos';
     }
 
     if (formData.anoIngresso < 1900 || formData.anoIngresso > 2025) {
