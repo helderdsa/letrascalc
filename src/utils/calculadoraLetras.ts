@@ -103,9 +103,43 @@ function calcularVencimentosAno(anoDestino: number): number[][] {
 }
 
 // Função para calcular o percentual de ADTS baseado nos anos de serviço
-function calcularPercentualADTS(anosServico: number): number {
-  // ADTS: 5% a cada 5 anos de serviço
-  const quinquenios = Math.floor(anosServico / 5);
+// Considera o período de congelamento da LC 173/2020
+function calcularPercentualADTS(anosServicoOuAnoIngresso: number, anoIngresso?: number): number {
+  // Se receber apenas um parâmetro, é compatibilidade com código antigo
+  if (anoIngresso === undefined) {
+    // Cálculo simplificado para compatibilidade (usado em alguns lugares)
+    const quinquenios = Math.floor(anosServicoOuAnoIngresso / 5);
+    return quinquenios * 5;
+  }
+
+  // Cálculo completo considerando o período de congelamento
+  const anoAtual = new Date().getFullYear();
+  const dataIngresso = new Date(anoIngresso, 0, 1); // 1º de janeiro do ano de ingresso
+  const dataAtual = new Date(anoAtual, 11, 31); // 31 de dezembro do ano atual
+  
+  let tempoValidoEmMeses = 0;
+  
+  // Calcular tempo válido mês a mês
+  const dataIteracao = new Date(dataIngresso.getFullYear(), dataIngresso.getMonth(), 1);
+  
+  while (dataIteracao < dataAtual) {
+    const anoIteracao = dataIteracao.getFullYear();
+    const mesIteracao = dataIteracao.getMonth();
+    
+    // Verificar se este mês está no período de congelamento
+    const dataInicioMes = new Date(anoIteracao, mesIteracao, 1);
+    const estaNoCongelamento = dataInicioMes >= DATA_CONGELAMENTO_ADTS_INICIO && dataInicioMes <= DATA_CONGELAMENTO_ADTS_FIM;
+    
+    if (!estaNoCongelamento) {
+      tempoValidoEmMeses++;
+    }
+    
+    // Avançar para o próximo mês
+    dataIteracao.setMonth(dataIteracao.getMonth() + 1);
+  }
+  
+  // Converter meses para quinquênios (60 meses = 1 quinquênio)
+  const quinquenios = Math.floor(tempoValidoEmMeses / 60);
   return quinquenios * 5; // 5% por quinquênio
 }
 
@@ -128,6 +162,9 @@ const ANOS_ENTRE_PROGRESSOES = 2;
 const DATA_DECRETO = new Date('2021-10-15');
 const DATA_LCE_405 = new Date('2009-08-02');
 const DATA_LCE_503 = new Date('2014-03-27');
+// Período de congelamento do ADTS pela Lei Complementar 173/2020
+const DATA_CONGELAMENTO_ADTS_INICIO = new Date('2020-05-27');
+const DATA_CONGELAMENTO_ADTS_FIM = new Date('2021-12-31');
 
 export class CalculadoraLetras {
   
@@ -141,7 +178,10 @@ export class CalculadoraLetras {
     
     
     // Calcular ADTS
-    const percentualADTS = calcularPercentualADTS(anosServico);
+    const percentualADTS = calcularPercentualADTS(anosServico, dadosProfessor.anoIngresso);
+    
+    // Adicionar informação sobre o período de congelamento
+    detalhes.push(`ℹ️ ADTS calculado considerando o congelamento entre 27/05/2020 e 31/12/2021 (LC 173/2020)`);
     
     // Verificar se o ADTS atual está correto
     if (dadosProfessor.adtsAtual === percentualADTS) {
@@ -162,10 +202,10 @@ export class CalculadoraLetras {
         progressaoDecreto: false,
         progressaoLCE405: false,
         progressaoLCE503: false,
-        adtsPercentual: calcularPercentualADTS(anosServico),
-        adtsQuinquenios: Math.floor(anosServico / 5),
+        adtsPercentual: calcularPercentualADTS(anosServico, dadosProfessor.anoIngresso),
+        adtsQuinquenios: Math.floor(calcularPercentualADTS(anosServico, dadosProfessor.anoIngresso) / 5),
         adtsAtual: dadosProfessor.adtsAtual,
-        adtsCorreto: dadosProfessor.adtsAtual === calcularPercentualADTS(anosServico),
+        adtsCorreto: dadosProfessor.adtsAtual === calcularPercentualADTS(anosServico, dadosProfessor.anoIngresso),
         detalhes,
         situacao: 'em_estagio'
       };
@@ -270,10 +310,10 @@ export class CalculadoraLetras {
       progressaoDecreto: temDireitoDecreto,
       progressaoLCE405: temDireitoLCE405,
       progressaoLCE503: temDireitoLCE503,
-      adtsPercentual: calcularPercentualADTS(anosServico),
-      adtsQuinquenios: Math.floor(anosServico / 5),
+      adtsPercentual: calcularPercentualADTS(anosServico, dadosProfessor.anoIngresso),
+      adtsQuinquenios: Math.floor(calcularPercentualADTS(anosServico, dadosProfessor.anoIngresso) / 5),
       adtsAtual: dadosProfessor.adtsAtual,
-      adtsCorreto: dadosProfessor.adtsAtual === calcularPercentualADTS(anosServico),
+      adtsCorreto: dadosProfessor.adtsAtual === calcularPercentualADTS(anosServico, dadosProfessor.anoIngresso),
       detalhes,
       situacao,
       retroativo: this.calcularRetroativo(dadosProfessor)
@@ -411,7 +451,7 @@ export class CalculadoraLetras {
         
         // Calcular ADTS para a data específica
         const anosServicoNaData = ano - dadosProfessor.anoIngresso;
-        const adtsCorreto = calcularPercentualADTS(anosServicoNaData);
+        const adtsCorreto = calcularPercentualADTS(anosServicoNaData, dadosProfessor.anoIngresso);
         const adtsAtual = dadosProfessor.adtsAtual; // Usar o ADTS informado pelo usuário
         
         // Aplicar ADTS nos vencimentos
