@@ -154,7 +154,7 @@ const MainForm: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto" style={{ width: '672px', maxWidth: '90vw' }}>
+    <div className="" >
       <div className="w-full bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-8 mb-8 overflow-hidden">
         <h2 className="text-3xl font-bold text-gray-800 text-center mb-8">Verifique sua progressão de letras!</h2>
         <h6 className="font-bold text-gray-800 text-center mb-8">Não deixe seus direitos de progressão para depois!</h6>
