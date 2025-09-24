@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CalculadoraLetras, type DadosProfessor, type ResultadoCalculo } from '../utils/calculadoraLetras';
 import ResultadoCalculoComponent from './ResultadoCalculo';
+import TermsModal from './TermsModal';
 
 interface FormData {
   nomeCompleto: string;
@@ -11,6 +12,8 @@ interface FormData {
   letraAtual: string;
   nivel: string; // I, II, III, IV, V, VI
   adtsAtual: number; // Percentual de ADTS que o professor recebe atualmente (0-35%)
+  conditions: boolean; // Aceitar termos e condições
+  newsletter: boolean; // Aceitar receber conteúdo por e-mail
 }
 
 interface FormErrors {
@@ -22,6 +25,7 @@ interface FormErrors {
   letraAtual?: string;
   nivel?: string;
   adtsAtual?: string;
+  conditions?: string;
 }
 
 const MainForm: React.FC = () => {
@@ -33,15 +37,16 @@ const MainForm: React.FC = () => {
     possuiProcessos: false,
     letraAtual: '',
     nivel: 'I',
-    adtsAtual: 0
+    adtsAtual: 0,
+    conditions: true, // Marcado por padrão
+    newsletter: true  // Marcado por padrão
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [resultado, setResultado] = useState<ResultadoCalculo | null>(null);
   const [proximaProgressao, setProximaProgressao] = useState<{ ano: number; letra: string; meses: number } | null>(null);
   const [mostrarResultado, setMostrarResultado] = useState(false);
-
-  const URL = import.meta.env.VITE_DB_URL || "http://localhost:3000/api/customers";
+  const [showTermsModal, setShowTermsModal] = useState(false);
 
   // Função para formatar o WhatsApp
   const formatWhatsapp = (value: string): string => {
@@ -116,6 +121,10 @@ const MainForm: React.FC = () => {
       newErrors.nivel = 'Nível da carreira é obrigatório';
     }
 
+    if (!formData.conditions) {
+      newErrors.conditions = 'Você deve aceitar os termos e condições';
+    }
+
     // Validação de consistência: verificar se letra e nível são compatíveis
 
     setErrors(newErrors);
@@ -125,7 +134,7 @@ const MainForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    await fetch(URL, {
+    await fetch(import.meta.env.VITE_DB_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -374,11 +383,59 @@ const MainForm: React.FC = () => {
           </div>
         </div>
 
+        {/* Termos e Condições */}
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <label className="flex items-start space-x-3 cursor-pointer">
+              <input
+                type="checkbox"
+                name="conditions"
+                checked={formData.conditions}
+                onChange={handleInputChange}
+                className="w-5 h-5 text-orange-500 border-2 border-gray-300 rounded focus:ring-orange-500 focus:ring-2 mt-0.5"
+              />
+              <span className="text-sm font-medium text-gray-700">
+                Li e aceito os{' '}
+                <span
+                  onClick={() => setShowTermsModal(true)}
+                  className="text-orange-600 underline hover:text-orange-700 font-semibold"
+                >
+                  termos e condições
+                </span>
+                {' '}*
+              </span>
+            </label>
+            {errors.conditions && (
+              <span className="text-red-500 text-sm font-medium ml-8">{errors.conditions}</span>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <label className="flex items-start space-x-3 cursor-pointer">
+              <input
+                type="checkbox"
+                name="newsletter"
+                checked={formData.newsletter}
+                onChange={handleInputChange}
+                className="w-5 h-5 text-orange-500 border-2 border-gray-300 rounded focus:ring-orange-500 focus:ring-2 mt-0.5"
+              />
+              <span className="text-sm font-medium text-gray-700">
+                Aceito receber conteúdo por e-mail
+              </span>
+            </label>
+          </div>
+        </div>
+
         {/* Botão de Submit */}
         <div className="pt-4">
           <button 
             type="submit" 
-            className="w-full bg-gradient-orange hover:opacity-90 text-white font-bold py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-orange-300 shadow-lg"
+            disabled={!formData.conditions}
+            className={`w-full font-bold py-4 px-6 rounded-lg transition-all duration-300 transform focus:outline-none focus:ring-4 shadow-lg ${
+              formData.conditions 
+                ? 'bg-gradient-orange hover:opacity-90 text-white hover:scale-[1.02] focus:ring-orange-300' 
+                : 'bg-gray-400 text-gray-200 cursor-not-allowed'
+            }`}
           >
             Calcule Agora!
           </button>
@@ -409,6 +466,12 @@ const MainForm: React.FC = () => {
           />
         </>
       )}
+
+      {/* Modal de Termos e Condições */}
+      <TermsModal 
+        isOpen={showTermsModal}
+        onClose={() => setShowTermsModal(false)}
+      />
     </div>
   );
 };
