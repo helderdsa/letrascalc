@@ -165,9 +165,11 @@ const MainForm: React.FC = () => {
 
   return (
     <div className="" >
-      <div className="w-full bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-8 mb-8 overflow-hidden">
-        <h2 className="text-3xl font-bold text-gray-800 text-center mb-8">Verifique sua progressão de letras!</h2>
-        <h6 className="font-bold text-gray-800 text-center mb-8">Não deixe seus direitos de progressão para depois!</h6>
+      {/* Mostrar formulário apenas quando NÃO estiver mostrando resultado */}
+      {!mostrarResultado && (
+        <div className="w-full bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-8 mb-8 overflow-hidden">
+          <h2 className="text-3xl font-bold text-gray-800 text-center mb-8">Verifique sua progressão de letras!</h2>
+          <h6 className="font-bold text-gray-800 text-center mb-8">Não deixe seus direitos de progressão para depois!</h6>
         
         <form onSubmit={handleSubmit} className="space-y-6">
         {/* Nome Completo */}
@@ -383,13 +385,29 @@ const MainForm: React.FC = () => {
         </div>
         </form>
       </div>
+      )}
 
-      {/* Resultado do Cálculo */}
+      {/* Resultado do Cálculo - agora com botão para voltar */}
       {mostrarResultado && (
-        <ResultadoCalculoComponent 
-          resultado={resultado} 
-          proximaProgressao={proximaProgressao} 
-        />
+        <>
+          {/* Botão para voltar ao formulário */}
+          <div className="mb-6">
+            <button 
+              onClick={() => setMostrarResultado(false)}
+              className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300 flex items-center space-x-2"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              <span>Voltar ao formulário</span>
+            </button>
+          </div>
+          
+          <ResultadoCalculoComponent 
+            resultado={resultado} 
+            proximaProgressao={proximaProgressao} 
+          />
+        </>
       )}
     </div>
   );
