@@ -41,6 +41,8 @@ const MainForm: React.FC = () => {
   const [proximaProgressao, setProximaProgressao] = useState<{ ano: number; letra: string; meses: number } | null>(null);
   const [mostrarResultado, setMostrarResultado] = useState(false);
 
+  const URL = import.meta.env.VITE_DB_URL || "http://localhost:3000/api/customers";
+
   // Função para formatar o WhatsApp
   const formatWhatsapp = (value: string): string => {
     // Remove todos os caracteres não numéricos
@@ -120,9 +122,17 @@ const MainForm: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    await fetch(URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
     if (validateForm()) {
       try {
         // Preparar dados para o cálculo
