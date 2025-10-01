@@ -3,8 +3,8 @@ import WhatsAppButton from "./components/WhatsAppButton";
 
 function App() {
   return (
-    <div className="min-h-screen w-full max-w-full m-0 p-5 bg-gradient-orange bg-fixed flex flex-col items-center justify-start pt-10 overflow-x-hidden relative box-border md:p-4 md:pt-5">
-      <div className="flex justify-center items-center mb-10 md:mb-8 sm:mb-5 bg-slate-50 rounded-lg p-4 max-w-fit">
+    <div className="h-screen w-screen m-0 p-0 bg-gradient-orange bg-fixed flex flex-col items-center justify-start pt-5 overflow-x-hidden overflow-y-auto relative box-border">
+      <div className="flex justify-center items-center mb-5 bg-slate-50 rounded-lg p-4 max-w-fit">
         {/* <!--?xml version="1.0" encoding="UTF-8"?--> */}
         <svg
           id="Camada_1"
